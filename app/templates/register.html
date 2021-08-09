@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+<!-- 這裡的內容會繼承到 base.html 檔案裡 -->
+
+{% block app_content %}
+<h1>Register Now.</h1>
+<p>註冊</p>
+<hr>
+<div class="row">
+    <div class="col-md-6">
+        {% import 'bootstrap/wtf.html' as wtf %}
+        {{ wtf.quick_form(form) }}
+    </div>
+</div>
+{% endblock %}
