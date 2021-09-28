@@ -10,9 +10,10 @@ from datetime import datetime
 def load_user(user_id):
     return User.query.filter_by(id=user_id).first()
 
-followers = db.Table("followers",
-            db.Column("follower_id", db.Integer, db.ForeignKey("user.id")), 
-            db.Column("followed_id", db.Integer, db.ForeignKey("user.id"))
+# 關聯表，左側的 user 正在關注右側的 user
+association_table_follow = db.Table("association_table_follow",
+            db.Column("follower_id", db.Integer, db.ForeignKey("user.id")), # 左側
+            db.Column("followed_id", db.Integer, db.ForeignKey("user.id"))  # 右側
 )
 
 class User(db.Model, UserMixin):
@@ -21,30 +22,30 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     posts = db.relationship('Post', backref=db.backref('author', lazy=True))
-    # 建立好 followers 這個 Table 後，需要把 followers 和 User 做聯接，故須在這邊添加 relationship
+    # 建立好 association_table_follow 這個 Table 後，需要把 association_table_follow 和 User 做聯接，故須在這邊添加 relationship
     followed = db.relationship(
-        # 從 User 要往誰去連
-        "User", secondary=followers,
-        primaryjoin=(followers.c.follower_id == id),
-        secondaryjoin=(followers.c.followed_id == id),
+        # 從 User 要往誰去連？要連去另一個 User 所以下面也是 "User"
+        "User", secondary=association_table_follow,
+        primaryjoin=(association_table_follow.c.follower_id == id),
+        secondaryjoin=(association_table_follow.c.followed_id == id),
         backref=db.backref('followers', lazy=True), lazy=True
     )
 
 # 到 python3 shell 進行測試：讓 u1 追隨 u2
 # >>> from app.models import db
-# >>> db.create_all()                                                     # 更新資料庫結構
+# >>> db.create_all()                                                        # 更新資料庫結構
 # >>> from app.models import User
-# >>> u1 = User(username='u1', password='12341234', email='u1@gmail.com') # 新建測試用 u1
-# >>> u2 = User(username='u2', password='12341234', email='u2@gmail.com') # 新建測試用 u2
-# >>> u1.followers                                                        # 查看 u1 追隨哪些人
-# []                                                                      # 空
-# >>> u1.followed                                                         # 查看 u1 被誰追隨
-# []                                                                      # 空
-# >>> u1.followers.append(u2)                                             # 使用 append() 讓 u1 追隨 u2
-# >>> u1.followers                                                        # 再次查看 u1 追隨哪些人
-# [<User 'u2'>]                                                           # u1 追隨了 u2
-# >>> u2.followed                                                         # 查看 u2 被誰追隨
-# [<User 'u1'>]                                                           # u2 被 u1 追隨
+# >>> u1 = User(username='u0001', password='12341234', email='u1@gmail.com') # 新建測試用 u1
+# >>> u2 = User(username='u0002', password='12341234', email='u2@gmail.com') # 新建測試用 u2
+# >>> u1.followers                                                           # 查看 u1 追隨哪些人
+# []                                                                         # 空
+# >>> u1.followed                                                            # 查看 u1 被誰追隨
+# []                                                                         # 空
+# >>> u1.followers.append(u2)                                                # 使用 append() 讓 u1 追隨 u2 
+# >>> u1.followers                                                           # 再次查看 u1 追隨哪些人
+# [<User 'u2'>]                                                              # u1 追隨了 u2
+# >>> u2.followed                                                            # 查看 u2 被誰追隨
+# [<User 'u1'>]                                                              # u2 被 u1 追隨
 # 只在 u1 做 append() 修改，但可以發現 u2 的資料也發生了改變
 
 # 測試：u2 不想被 u1 追隨。亦即 u2 取消 u1 的追隨
