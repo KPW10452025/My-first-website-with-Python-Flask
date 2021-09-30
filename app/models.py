@@ -37,23 +37,16 @@ class User(db.Model, UserMixin):
 # >>> from app.models import User
 # >>> u1 = User(username='u0001', password='12341234', email='u1@gmail.com') # 新建測試用 u1
 # >>> u2 = User(username='u0002', password='12341234', email='u2@gmail.com') # 新建測試用 u2
-# >>> u1.followers                                                           # 查看 u1 追隨哪些人
+# >>> u1.followers                                                           # 查看 u1 被哪些人關注。u1 的粉絲、u1 的追隨者
 # []                                                                         # 空
-# >>> u1.followed                                                            # 查看 u1 被誰追隨
+# >>> u1.followed                                                            # 查看 u1 關注了誰、追隨了誰
 # []                                                                         # 空
-# >>> u1.followers.append(u2)                                                # 使用 append() 讓 u1 追隨 u2 
-# >>> u1.followers                                                           # 再次查看 u1 追隨哪些人
-# [<User 'u2'>]                                                              # u1 追隨了 u2
-# >>> u2.followed                                                            # 查看 u2 被誰追隨
-# [<User 'u1'>]                                                              # u2 被 u1 追隨
+# >>> u1.followers.append(u2)                                                # 使用 append() 讓 u1 增加一個追隨者 u2
+# >>> u1.followers                                                           # 再次查看 u1 的追隨者、被誰關注
+# [<User 'u2'>]                                                              # u1 被 u2 關注了
+# >>> u2.followed                                                            # 查看 u2 追隨了誰、關注了誰
+# [<User 'u1'>]                                                              # u2 關注了 u1
 # 只在 u1 做 append() 修改，但可以發現 u2 的資料也發生了改變
-
-# 測試：u2 不想被 u1 追隨。亦即 u2 取消 u1 的追隨
-# >>> u2.followed.remove(u1)                                              # 使用 remove 讓 u2 取消 u1 的追隨                         
-# >>> u2.followed                                                         # 再次觀看 u2 被哪些人追隨
-# []                                                                      # 空
-# >>> u1.followers                                                        # 此時因為資料庫的連動，觀看 u1 追隨哪些人
-# []                                                                      # 空
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -67,7 +60,7 @@ class User(db.Model, UserMixin):
             data = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])
             return User.query.filter_by(id=data['id']).first()
         except:
-            return 
+            return
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
