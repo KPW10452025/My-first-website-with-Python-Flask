@@ -62,6 +62,17 @@ class User(db.Model, UserMixin):
         except:
             return
 
+    def follow(self, user):
+        
+    def is_following(self, user):
+        return self.followed.filter(association_table_follow.c.followed_id == user.id).count > 0
+        # 目標功能：判斷目標用戶是否已關注。
+        # 說明一：當目標用戶，已被關注時，畫面會顯示“已關注”並無法再次點選關注。
+        # 說明二：當目標用戶，尚未關注時，畫面會顯示“未關注”並可以點選關注。
+        # 從 User 本身所有的已關注對象中，尋找是否有與目標相同的資料，若擁有則會大於零。
+        # 若大於零 return True ，則代表用戶本身的資料庫中已擁有目標用戶，即為已關注。
+        # 若等於零 return False，則代表用戶本身的資料庫中並沒有目標用戶，即為尚未關注。
+
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(500), nullable=False)
