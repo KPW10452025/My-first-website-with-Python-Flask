@@ -63,6 +63,10 @@ class User(db.Model, UserMixin):
             return
 
     def follow(self, user):
+        # 運用 is_following 判斷目標是否已關注，因為若已關注會 return True 故在此用 if not
+        if not self.is_following(self):
+            self.followed.append(user)
+            # 若尚未關注，則會關注目標
         
     def is_following(self, user):
         return self.followed.filter(association_table_follow.c.followed_id == user.id).count > 0
