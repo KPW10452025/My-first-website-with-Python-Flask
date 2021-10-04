@@ -24,7 +24,9 @@ def index():
         db.session.commit()
         flash("You have post a new tweet!", category='info')
         flash("您發布了一條新推文!", category='info')
-    return render_template("index.html", title = "Home", form = form)
+    n_followers = len(current_user.followers)
+    n_followed = len(current_user.followed)
+    return render_template("index.html", title = "Home", form = form, n_followers = n_followers, n_followed = n_followed)
 
 @app.route("/register", methods=["Get", "Post"])
 def register():
