@@ -21,6 +21,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    avatar_img = db.Column(db.String(120), default="/static/asset/Default_avatar.JPG", nullable=False)
     posts = db.relationship('Post', backref=db.backref('author', lazy=True))
     # 建立好 association_table_follow 這個 Table 後，需要把 association_table_follow 和 User 做聯接，故須在這邊添加 relationship
     followed = db.relationship(
