@@ -26,7 +26,11 @@ def index():
         flash("您發布了一條新推文!", category='info')
     n_followers = len(current_user.followers)
     n_followed = len(current_user.followed)
-    return render_template("index.html", title = "Home", form = form, n_followers = n_followers, n_followed = n_followed)
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    # 在 route index 中新增 posts 並從數據庫中提取 Post 資料
+    # 在 return 中回傳 posts = posts
+    return render_template("index.html", title = "Home", form = form, posts = posts, 
+    n_followers = n_followers, n_followed = n_followed)
 
 @app.route("/register", methods=["Get", "Post"])
 def register():
