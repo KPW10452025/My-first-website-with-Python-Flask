@@ -49,8 +49,12 @@
                 </a>
               </li>
             {% endif %}
-            {% for i in range(posts.pages) %}
-              <li><a href="#">{{ i+1 }}</a></li>
+            {% for i in posts.iter_pages(right_current=5) %}
+              {% if i %}
+                <li><a href="{{ url_for('index', page=i) }}">{{ i }}</a></li>
+              {% else %}
+                <li><a href="#">...</a></li>
+              {% endif %}
             {% endfor %}
             {% if posts.has_next %}
               <li>
