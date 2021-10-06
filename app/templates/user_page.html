@@ -10,7 +10,7 @@
         {% if current_user.is_following(user) %}
           <a href="#">Unfollow</a>
         {% else %}
-          <a href="#">Follow</a>
+          <a href="{{ url_for('follow', username=user.username) }}">Follow</a>
         {% endif %}
       {% endif %}
       <hr>
