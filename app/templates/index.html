@@ -51,9 +51,9 @@
             {% endif %}
             {% for i in posts.iter_pages(right_current=5) %}
               {% if i %}
-                <li><a href="{{ url_for('index', page=i) }}">{{ i }}</a></li>
+                <li class='{% if i == posts.page %}active{% endif %}'><a href="{{ url_for('index', page=i) }}">{{ i }}</a></li>
               {% else %}
-                <li><a href="#">...</a></li>
+                <li class='disable'><a href="#">...</a></li>
               {% endif %}
             {% endfor %}
             {% if posts.has_next %}
