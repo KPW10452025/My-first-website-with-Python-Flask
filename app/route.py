@@ -33,6 +33,11 @@ def index():
     return render_template("index.html", title = "Home", form = form, posts = posts, 
     n_followers = n_followers, n_followed = n_followed)
 
+@app.route("/user_page/<username>")
+@login_required
+def user_page(username):
+    return render_template("user_page.html")
+
 @app.route("/register", methods=["Get", "Post"])
 def register():
     if current_user.is_authenticated:
