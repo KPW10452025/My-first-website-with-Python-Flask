@@ -49,11 +49,9 @@
                 </a>
               </li>
             {% endif %}
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
+            {% for i in range(posts.pages) %}
+              <li><a href="#">{{ i+1 }}</a></li>
+            {% endfor %}
             {% if posts.has_next %}
               <li>
                 <a href="{{ url_for('index', page=posts.next_num) }}" aria-label="Next">
