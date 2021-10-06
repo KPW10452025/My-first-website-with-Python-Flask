@@ -36,7 +36,13 @@ def index():
 @app.route("/user_page/<username>")
 @login_required
 def user_page(username):
-    return render_template("user_page.html")
+    user = User.query.filter_by(username=username).first()
+    if user:
+        page = request.args.get("page", 1, type=int)
+        posts = Post.query.filter_by(user_id=user.id).order_by(Post.timestamp.desc()).paginate(page, 2, False)
+        return render_template("user_page.html", user=user, posts=posts)
+    else:
+        return '404'
 
 @app.route("/register", methods=["Get", "Post"])
 def register():

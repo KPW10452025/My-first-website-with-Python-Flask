@@ -1,7 +1,7 @@
 {% for post in posts.items %}
 <div class="media">
     <div class="media-left">
-        <a href="#">
+        <a href="{{ url_for('user_page', username=post.author.username) }}">
             <img class="media-object" src="{{ post.author.avatar_img }}" alt="avatar", width="64px">
         </a>
     </div>
