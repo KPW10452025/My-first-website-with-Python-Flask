@@ -3,7 +3,7 @@
 
 {% block app_content %}
   <h1>Hello, {{ current_user.username }}!</h1>
-  <hr>
+  <!-- <hr> -->
   <p>I am Webb.</p>
   <p>This is my website about How To Use Python Flask To Build A Website.</p>
 
@@ -18,7 +18,7 @@
   {% endif %}
   <!-- 結束 if 用法 -->
   <br>
-  <hr>
+  <!-- <hr> -->
   <div class="row">
     <div class="col-md-6">
       {% import 'bootstrap/wtf.html' as wtf %}
@@ -42,21 +42,25 @@
       <nav aria-label="Page navigation">
         <center>
           <ul class="pagination">
-            <li>
-              <a href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
+            {% if posts.has_prev %}
+              <li>
+                <a href="{{ url_for('index', page=posts.prev_num) }}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo; Prev</span>
+                </a>
+              </li>
+            {% endif %}
             <li><a href="#">1</a></li>
             <li><a href="#">2</a></li>
             <li><a href="#">3</a></li>
             <li><a href="#">4</a></li>
             <li><a href="#">5</a></li>
-            <li>
-              <a href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
+            {% if posts.has_next %}
+              <li>
+                <a href="{{ url_for('index', page=posts.next_num) }}" aria-label="Next">
+                  <span aria-hidden="true">&raquo; Next</span>
+                </a>
+              </li>
+            {% endif %}
           </ul>
         </center>
       </nav>        
