@@ -24,7 +24,7 @@
         {% import 'bootstrap/wtf.html' as wtf %}
         {{ wtf.quick_form(form) }}
         <hr>
-        {% for post in posts %}
+        {% for post in posts.items %}
           <div class="media">
             <div class="media-left">
               <a href="#">
