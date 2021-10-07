@@ -8,9 +8,9 @@
         <a href="#">Edit Profile</a>
       {% else %}
         {% if current_user.is_following(user) %}
-          <a href="#">Unfollow</a>
+          <a href="{{ url_for('unfollow', username=user.username) }}">Unfollow 取消關注</a>
         {% else %}
-          <a href="{{ url_for('follow', username=user.username) }}">Follow</a>
+          <a href="{{ url_for('follow', username=user.username) }}">Follow 關注</a>
         {% endif %}
       {% endif %}
       <hr>

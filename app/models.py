@@ -65,13 +65,13 @@ class User(db.Model, UserMixin):
 
     def follow(self, user):
         # 運用 is_following 判斷目標是否已關注，因為若已關注會 return True 故在此用 if not
-        if not self.is_following(self):
+        if not self.is_following(user):
             self.followed.append(user)
             # 若尚未關注，則會關注目標
     
     def unfollow(self, user):
         # is_following 判斷目標是否已關注，因為若已關注會 return True
-        if self.is_following(self):
+        if self.is_following(user):
             self.followed.remove(user)
             # 若已關注，則取消關注
         
